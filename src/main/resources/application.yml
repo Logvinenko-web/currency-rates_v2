@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: spring_rate
+
+  # Конфігурація Liquibase (JDBC)
+  liquibase:
+    enabled: true
+    url: jdbc:postgresql://postgres:5432/db_rate
+    user: user
+    password: user
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+  # Конфігурація R2DBC
+  r2dbc:
+    url: r2dbc:postgresql://postgres:5432/db_rate
+    username: user
+    password: user
+
+  config:
+    mock-url: http://host.docker.internal:8090
+    url:
+      fiat: /fiat-currency-rates
+      crypto: /crypto-currency-rates
+    api:
+      key: secret-key
+
+
+
