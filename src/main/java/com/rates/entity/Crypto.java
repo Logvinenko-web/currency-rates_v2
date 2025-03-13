@@ -20,10 +20,8 @@ public class Crypto {
     @Id
     private Long id;
 
-//    @JsonProperty("name")
     private String currency;
 
-//    @JsonProperty("value")
     private double rate;
 
     @Column("created_at")
