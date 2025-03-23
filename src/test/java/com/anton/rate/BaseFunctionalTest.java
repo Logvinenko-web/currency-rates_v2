@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,13 @@ public class BaseFunctionalTest extends BaseTest {
     @Autowired
     FiatCurrencyRepository fiatCurrencyRepository;
 
+    @BeforeAll
+    static void setup () {
+        MOCK_SERVER.start();
+        PSQL_CONTAINER.start();
+    }
     @BeforeEach
-    void setup () {
+    void reset () {
         MOCK_SERVER.resetAll();
         cryptoCurrencyRepository.deleteAll().block();
         fiatCurrencyRepository.deleteAll().block();
@@ -62,8 +68,6 @@ public class BaseFunctionalTest extends BaseTest {
 
     @DynamicPropertySource
     protected static void registerMockServer (DynamicPropertyRegistry registry) {
-        MOCK_SERVER.start();
-        PSQL_CONTAINER.start();
         registry.add("spring.liquibase.url", PSQL_CONTAINER::getJdbcUrl);
         registry.add("spring.r2dbc.url",
             () -> PSQL_CONTAINER.getJdbcUrl().replace(JDBC_PREFIX, R2DBC_PREFIX));
