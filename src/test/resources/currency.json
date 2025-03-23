@@ -1,0 +1,30 @@
+{
+  "fiat": [
+    {
+      "currency": "USD",
+      "rate": 45.67
+    },
+    {
+      "currency": "EUR",
+      "rate": 56.78
+    },
+    {
+      "currency": "BDT",
+      "rate": 156.7833
+    }
+  ],
+  "crypto": [
+    {
+      "currency": "BTC",
+      "rate": 12345.67
+    },
+    {
+      "currency": "ETH",
+      "rate": 234.56
+    },
+    {
+      "currency": "BMW",
+      "rate": 211114.56345
+    }
+  ]
+}
