@@ -24,7 +24,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Checking the currency response if Fiat is empty (Got internal error from fiat api)")
-    public void checkEmptyFiat () throws JSONException {
+    public void checkEmptyFiat () {
         mockGetInternalErrorStatus(FIAT_PATH);
         mockGetSuccessResponse(CRYPTO_PATH, readAsString("crypto"));
         var response = getCurrency();
@@ -33,7 +33,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Checking the currency response if Crypto is empty (Got internal error from crypto api)")
-    public void checkEmptyCrypto () throws JSONException {
+    public void checkEmptyCrypto () {
         mockGetInternalErrorStatus(CRYPTO_PATH);
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
         var response = getCurrency();

@@ -1,11 +1,14 @@
 package com.anton.rate;
 
 import com.anton.rate.model.CurrencyResponse;
+import com.anton.rate.repository.CryptoCurrencyRepository;
+import com.anton.rate.repository.FiatCurrencyRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +19,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Tag("FunctionalTest")
-public class BaseFunctionalTest extends BaseTest{
+public class BaseFunctionalTest extends BaseTest {
 
     private static final String JDBC_PREFIX = "jdbc";
 
@@ -33,6 +36,19 @@ public class BaseFunctionalTest extends BaseTest{
 
     @Autowired
     WebTestClient webTestClient;
+
+    @Autowired
+    CryptoCurrencyRepository cryptoCurrencyRepository;
+
+    @Autowired
+    FiatCurrencyRepository fiatCurrencyRepository;
+
+    @BeforeEach
+    void setup () {
+        MOCK_SERVER.resetAll();
+        cryptoCurrencyRepository.deleteAll().block();
+        fiatCurrencyRepository.deleteAll().block();
+    }
 
     @AfterAll
     public static void stopWireMock () {
@@ -60,7 +76,7 @@ public class BaseFunctionalTest extends BaseTest{
     }
 
     protected StubMapping mockGetSuccessResponse (String path, String responseBody) {
-       return MOCK_SERVER.stubFor(WireMock.get(WireMock.urlEqualTo(path))
+        return MOCK_SERVER.stubFor(WireMock.get(WireMock.urlEqualTo(path))
             .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withStatus(200)
@@ -74,13 +90,13 @@ public class BaseFunctionalTest extends BaseTest{
                 .withStatus(500)));
     }
 
-    protected CurrencyResponse getCurrency() {
-       return  webTestClient.get().uri("/currency-rates")
-           .exchange()
-           .expectStatus().isOk()
-           .expectBody(CurrencyResponse.class)
-           .returnResult()
-           .getResponseBody();
+    protected CurrencyResponse getCurrency () {
+        return webTestClient.get().uri("/currency-rates")
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(CurrencyResponse.class)
+            .returnResult()
+            .getResponseBody();
     }
 
 
