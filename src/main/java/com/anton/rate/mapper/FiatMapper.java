@@ -1,8 +1,8 @@
-package com.rates.mapper;
+package com.anton.rate.mapper;
 
-import com.rates.entity.Fiat;
-import com.rates.model.FiatDto;
-import com.rates.model.FiatResponse;
+import com.anton.rate.entity.Fiat;
+import com.anton.rate.model.FiatDto;
+import com.anton.rate.model.FiatResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

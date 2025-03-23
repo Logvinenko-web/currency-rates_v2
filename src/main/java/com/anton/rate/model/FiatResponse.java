@@ -1,4 +1,4 @@
-package com.rates.model;
+package com.anton.rate.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

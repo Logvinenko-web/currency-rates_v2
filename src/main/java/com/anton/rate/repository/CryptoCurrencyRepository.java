@@ -1,6 +1,6 @@
-package com.rates.repository;
+package com.anton.rate.repository;
 
-import com.rates.entity.Crypto;
+import com.anton.rate.entity.Crypto;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;

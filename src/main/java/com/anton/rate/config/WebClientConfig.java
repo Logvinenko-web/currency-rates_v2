@@ -1,4 +1,4 @@
-package com.rates.config;
+package com.anton.rate.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

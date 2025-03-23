@@ -1,4 +1,4 @@
-package com.rates.entity;
+package com.anton.rate.entity;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("fiat ")
-public class Fiat {
+@Table("crypto")
+public class Crypto {
+
     @Id
     private Long id;
 
@@ -29,4 +31,5 @@ public class Fiat {
     @Column("updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 }

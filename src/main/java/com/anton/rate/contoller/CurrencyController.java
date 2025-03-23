@@ -1,8 +1,8 @@
-package com.rates.contoller;
+package com.anton.rate.contoller;
 
-import com.rates.model.CurrencyResponse;
-import com.rates.service.CryptoService;
-import com.rates.service.FiatService;
+import com.anton.rate.model.CurrencyResponse;
+import com.anton.rate.service.CryptoService;
+import com.anton.rate.service.FiatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

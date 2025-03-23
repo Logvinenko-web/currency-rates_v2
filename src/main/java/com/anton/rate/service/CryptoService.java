@@ -1,11 +1,11 @@
-package com.rates.service;
+package com.anton.rate.service;
 
-import com.rates.config.RateConfig;
-import com.rates.entity.Crypto;
-import com.rates.mapper.CryptoMapper;
-import com.rates.model.CryptoDto;
-import com.rates.model.CryptoResponse;
-import com.rates.repository.CryptoCurrencyRepository;
+import com.anton.rate.config.RateConfig;
+import com.anton.rate.entity.Crypto;
+import com.anton.rate.mapper.CryptoMapper;
+import com.anton.rate.model.CryptoDto;
+import com.anton.rate.model.CryptoResponse;
+import com.anton.rate.repository.CryptoCurrencyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

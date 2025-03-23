@@ -1,8 +1,8 @@
-package com.rates.mapper;
+package com.anton.rate.mapper;
 
-import com.rates.entity.Crypto;
-import com.rates.model.CryptoDto;
-import com.rates.model.CryptoResponse;
+import com.anton.rate.model.CryptoResponse;
+import com.anton.rate.entity.Crypto;
+import com.anton.rate.model.CryptoDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

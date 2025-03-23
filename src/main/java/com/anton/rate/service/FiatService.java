@@ -1,11 +1,11 @@
-package com.rates.service;
+package com.anton.rate.service;
 
-import com.rates.config.RateConfig;
-import com.rates.entity.Fiat;
-import com.rates.mapper.FiatMapper;
-import com.rates.model.FiatDto;
-import com.rates.model.FiatResponse;
-import com.rates.repository.FiatCurrencyRepository;
+import com.anton.rate.config.RateConfig;
+import com.anton.rate.entity.Fiat;
+import com.anton.rate.mapper.FiatMapper;
+import com.anton.rate.model.FiatDto;
+import com.anton.rate.model.FiatResponse;
+import com.anton.rate.repository.FiatCurrencyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

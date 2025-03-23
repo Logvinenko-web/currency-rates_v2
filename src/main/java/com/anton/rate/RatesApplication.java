@@ -1,6 +1,6 @@
-package com.rates;
+package com.anton.rate;
 
-import com.rates.config.RateConfig;
+import com.anton.rate.config.RateConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,4 +1,4 @@
-package com.rates.entity;
+package com.anton.rate.entity;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,20 +10,16 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("crypto")
-public class Crypto {
-
+@Table("fiat ")
+public class Fiat {
     @Id
     private Long id;
 
-//    @JsonProperty("name")
     private String currency;
 
-//    @JsonProperty("value")
     private double rate;
 
     @Column("created_at")
@@ -33,5 +29,4 @@ public class Crypto {
     @Column("updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
 }
