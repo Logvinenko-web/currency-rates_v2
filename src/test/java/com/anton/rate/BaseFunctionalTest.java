@@ -6,7 +6,6 @@ import com.anton.rate.repository.FiatCurrencyRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -29,10 +28,10 @@ public class BaseFunctionalTest extends BaseTest {
 
     protected static final String CRYPTO_PATH = "/crypto-currency-rates";
 
+    protected static final String CURRENCY_PATH = "/currency-rates";
+
     private static final WireMockServer MOCK_SERVER = new WireMockServer(
         WireMockConfiguration.wireMockConfig().port(8099));
-
-    static WireMockServer wireMockServer;
 
     @Autowired
     WebTestClient webTestClient;
@@ -52,9 +51,7 @@ public class BaseFunctionalTest extends BaseTest {
 
     @AfterAll
     public static void stopWireMock () {
-        if (wireMockServer != null) {
-            wireMockServer.stop();
-        }
+        MOCK_SERVER.stop();
     }
 
     static PostgreSQLContainer<?> PSQL_CONTAINER = new PostgreSQLContainer<>("postgres:latest")
@@ -75,23 +72,23 @@ public class BaseFunctionalTest extends BaseTest {
         registry.add("spring.config.mock-url", () -> "http://localhost:" + MOCK_SERVER.port());
     }
 
-    protected StubMapping mockGetSuccessResponse (String path, String responseBody) {
-        return MOCK_SERVER.stubFor(WireMock.get(WireMock.urlEqualTo(path))
+    protected void mockGetSuccessResponse (String path, String responseBody) {
+        MOCK_SERVER.stubFor(WireMock.get(path)
             .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withStatus(200)
                 .withBody(responseBody)));
     }
 
-    protected StubMapping mockGetInternalErrorStatus (String path) {
-        return MOCK_SERVER.stubFor(WireMock.get(WireMock.urlEqualTo(path))
+    protected void mockGetInternalErrorStatus (String path) {
+        MOCK_SERVER.stubFor(WireMock.get(path)
             .willReturn(WireMock.aResponse()
                 .withHeader("Content-Type", "application/json")
                 .withStatus(500)));
     }
 
     protected CurrencyResponse getCurrency () {
-        return webTestClient.get().uri("/currency-rates")
+        return webTestClient.get().uri(CURRENCY_PATH)
             .exchange()
             .expectStatus().isOk()
             .expectBody(CurrencyResponse.class)

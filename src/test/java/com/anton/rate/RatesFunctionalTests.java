@@ -11,7 +11,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Checking valid currency response ")
-    public void checkValidResponse () throws JSONException {
+    void checkValidResponse () throws JSONException {
 
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
         mockGetSuccessResponse(CRYPTO_PATH, readAsString("crypto"));
@@ -25,7 +25,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Checking the currency response if Fiat is empty (Got internal error from fiat api)")
-    public void checkEmptyFiat () {
+    void checkEmptyFiat () {
 
         mockGetInternalErrorStatus(FIAT_PATH);
         mockGetSuccessResponse(CRYPTO_PATH, readAsString("crypto"));
@@ -37,7 +37,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Checking the currency response if Crypto is empty (Got internal error from crypto api)")
-    public void checkEmptyCrypto () {
+    void checkEmptyCrypto () {
 
         mockGetInternalErrorStatus(CRYPTO_PATH);
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
@@ -49,7 +49,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Check last 3 data with fiat db")
-    public void checkFiatDataWithDb () throws JSONException {
+    void checkFiatDataWithDb () throws JSONException {
 
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
         mockGetSuccessResponse(CRYPTO_PATH, readAsString("crypto"));
@@ -68,7 +68,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
 
     @Test
     @DisplayName("Check last 3 data with crypto db")
-    public void checkCryptoDataWithDb () throws JSONException {
+    void checkCryptoDataWithDb () throws JSONException {
 
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
         mockGetSuccessResponse(CRYPTO_PATH, readAsString("crypto"));
