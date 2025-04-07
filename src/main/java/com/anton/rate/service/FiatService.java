@@ -6,6 +6,7 @@ import com.anton.rate.mapper.FiatMapper;
 import com.anton.rate.model.FiatDto;
 import com.anton.rate.model.FiatResponse;
 import com.anton.rate.repository.FiatCurrencyRepository;
+import com.anton.rate.repository.LastCurrencyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class FiatService {
 
     private final WebClient webClient;
     private final FiatCurrencyRepository repository;
+    private final LastCurrencyRepository lastCurrencyRepository;
     private final RateConfig rateConfig;
 
     public Flux<Fiat> fetchAndSaveFiatRates () {
@@ -34,9 +36,11 @@ public class FiatService {
             .map(FiatMapper.INSTANCE::toFiatEntity)
             .onErrorResume(e -> {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
-                return repository.findTop3ByOrderByCreatedAtDesc();
+                return repository.findLastCurrency("fiat");
             })
-            .flatMap(repository::save);
+            .flatMap(fiat -> lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "fiat")
+                .then(repository.save(fiat))
+            );
     }
 
     public Mono<List<FiatDto>> getFiatRates () {

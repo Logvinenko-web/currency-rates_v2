@@ -6,6 +6,7 @@ import com.anton.rate.mapper.CryptoMapper;
 import com.anton.rate.model.CryptoDto;
 import com.anton.rate.model.CryptoResponse;
 import com.anton.rate.repository.CryptoCurrencyRepository;
+import com.anton.rate.repository.LastCurrencyRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class CryptoService {
 
     private final WebClient webClient;
     private final CryptoCurrencyRepository repository;
+    private final LastCurrencyRepository lastCurrencyRepository;
     private final RateConfig rateConfig;
 
     public Flux<Crypto> fetchAndSaveCryptoRates () {
@@ -33,9 +35,11 @@ public class CryptoService {
             .map(CryptoMapper.INSTANCE::toCryptoEntity)
             .onErrorResume(e -> {
                 log.info("Error while fetching crypto data: {}", e.getMessage());
-                return repository.findTop3ByOrderByCreatedAtDesc();
+                return repository.findLastCurrency("crypto");
             })
-            .flatMap(repository::save);
+            .flatMap(fiat -> lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "crypto")
+                .then(repository.save(fiat))
+            );
 
     }
 

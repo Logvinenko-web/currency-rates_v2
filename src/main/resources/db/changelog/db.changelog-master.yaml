@@ -54,3 +54,41 @@ databaseChangeLog:
                   name: updated_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
+
+  - changeSet:
+      id: 3
+      author: anton
+      changes:
+        - createTable:
+            tableName: last_currency
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: currency
+                  type: VARCHAR(255)
+              - column:
+                  name: rate
+                  type: DOUBLE
+              - column:
+                  name: source
+                  type: VARCHAR(10)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createIndex:
+            indexName: idx_currency_unique
+            tableName: last_currency
+            unique: true
+            columns:
+              - column:
+                  name: currency
