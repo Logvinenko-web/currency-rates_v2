@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface FiatCurrencyRepository extends R2dbcRepository<Fiat, Long> {
-    @Query("SELECT * FROM fiat ORDER BY created_at DESC LIMIT 3")
-    Flux<Fiat> findTop3ByOrderByCreatedAtDesc();
+    @Query("SELECT f.currency, f.rate FROM fiat f JOIN ( SELECT currency, MAX(created_at) AS last_created_at FROM fiat GROUP BY currency ) AS l ON f.currency = l.currency AND f.created_at = l.last_created_at;")
+    Flux<Fiat> findLastCurrency();
 
 }

@@ -34,7 +34,7 @@ public class FiatService {
             .map(FiatMapper.INSTANCE::toFiatEntity)
             .onErrorResume(e -> {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
-                return repository.findTop3ByOrderByCreatedAtDesc();
+                return repository.findLastCurrency();
             })
             .flatMap(repository::save);
     }

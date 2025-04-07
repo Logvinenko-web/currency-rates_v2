@@ -8,6 +8,6 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface CryptoCurrencyRepository extends R2dbcRepository<Crypto, Long> {
-    @Query("SELECT * FROM crypto ORDER BY created_at DESC LIMIT 3")
-    Flux<Crypto> findTop3ByOrderByCreatedAtDesc();
+    @Query("SELECT f.currency, f.rate FROM crypto f JOIN ( SELECT currency, MAX(created_at) AS last_created_at FROM crypto GROUP BY currency ) AS l ON f.currency = l.currency AND f.created_at = l.last_created_at;")
+    Flux<Crypto> findLastCurrency();
 }
