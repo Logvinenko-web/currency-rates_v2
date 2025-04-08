@@ -8,7 +8,6 @@ import com.anton.rate.model.FiatDto;
 import com.anton.rate.model.FiatResponse;
 import com.anton.rate.repository.FiatCurrencyRepository;
 import com.anton.rate.repository.LastCurrencyRepository;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +35,6 @@ public class FiatService {
             .bodyToFlux(FiatResponse.class)
             .doOnNext(fiat -> log.info("Received fiat data: {}", fiat))
             .map(FiatMapper.INSTANCE::toFiatEntity)
-            .onErrorResume(e -> {
-                log.info("Error while fetching fiat data: {}", e.getMessage());
-                return repository.findLastCurrency("fiat");
-            })
             .flatMap(fiat ->
                 repository.save(fiat)
                     .then(
@@ -58,7 +53,12 @@ public class FiatService {
                                 )
                             )
                     )
-                    .thenReturn(fiat));
+                    .thenReturn(fiat))
+            .onErrorResume(e -> {
+                log.info("Error while fetching fiat data: {}", e.getMessage());
+                return repository.findLastCurrency("fiat");
+            })
+            ;
 
     }
 

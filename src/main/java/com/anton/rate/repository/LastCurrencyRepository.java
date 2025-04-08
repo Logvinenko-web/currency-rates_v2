@@ -13,15 +13,4 @@ public interface LastCurrencyRepository extends R2dbcRepository<LastCurrency, Lo
 
     Mono<LastCurrency> findByCurrency(String currency);
 
-    @Modifying
-    @Query("""
-    INSERT INTO last_currency (currency, rate, source) 
-    VALUES (:currency, :rate, :source)
-    ON CONFLICT (currency) 
-    DO UPDATE SET rate = EXCLUDED.rate, updated_at = NOW();
-    """)
-    Mono<Void> saveOrUpdateLatestRate(@Param("currency") String currency,
-        @Param("rate") Double rate,
-        @Param("source") String source);
-
 }
