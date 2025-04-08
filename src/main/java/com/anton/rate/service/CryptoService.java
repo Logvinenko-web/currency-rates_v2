@@ -2,6 +2,7 @@ package com.anton.rate.service;
 
 import com.anton.rate.config.RateConfig;
 import com.anton.rate.entity.Crypto;
+import com.anton.rate.entity.LastCurrency;
 import com.anton.rate.mapper.CryptoMapper;
 import com.anton.rate.model.CryptoDto;
 import com.anton.rate.model.CryptoResponse;
@@ -39,9 +40,23 @@ public class CryptoService {
             })
             .flatMap(crypto ->
                 repository.save(crypto)
-                    .then(lastCurrencyRepository.saveOrUpdateLatestRate(crypto.getCurrency(), crypto.getRate(), "crypto"))
-                    .thenReturn(crypto)
-            );
+                    .then(
+                        lastCurrencyRepository.findByCurrency(crypto.getCurrency())
+                            .flatMap(existing -> {
+                                existing.setRate(crypto.getRate());
+                                return lastCurrencyRepository.save(existing);
+                            })
+                            .switchIfEmpty(
+                                lastCurrencyRepository.save(
+                                    LastCurrency.builder()
+                                        .currency(crypto.getCurrency())
+                                        .rate(crypto.getRate())
+                                        .source("crypto")
+                                        .build()
+                                )
+                            )
+                    )
+                    .thenReturn(crypto));
 
     }
 

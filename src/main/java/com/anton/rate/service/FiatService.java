@@ -2,11 +2,13 @@ package com.anton.rate.service;
 
 import com.anton.rate.config.RateConfig;
 import com.anton.rate.entity.Fiat;
+import com.anton.rate.entity.LastCurrency;
 import com.anton.rate.mapper.FiatMapper;
 import com.anton.rate.model.FiatDto;
 import com.anton.rate.model.FiatResponse;
 import com.anton.rate.repository.FiatCurrencyRepository;
 import com.anton.rate.repository.LastCurrencyRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +42,24 @@ public class FiatService {
             })
             .flatMap(fiat ->
                 repository.save(fiat)
-                    .then(lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "fiat"))
+                    .then(
+                        lastCurrencyRepository.findByCurrency(fiat.getCurrency())
+                            .flatMap(existing -> {
+                                existing.setRate(fiat.getRate());
+                                return lastCurrencyRepository.save(existing);
+                            })
+                            .switchIfEmpty(
+                                lastCurrencyRepository.save(
+                                    LastCurrency.builder()
+                                        .currency(fiat.getCurrency())
+                                        .rate(fiat.getRate())
+                                        .source("fiat")
+                                        .build()
+                                )
+                            )
+                    )
                     .thenReturn(fiat));
+
     }
 
     public Mono<List<FiatDto>> getFiatRates () {

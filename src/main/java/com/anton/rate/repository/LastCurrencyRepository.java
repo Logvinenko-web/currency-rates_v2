@@ -11,6 +11,8 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface LastCurrencyRepository extends R2dbcRepository<LastCurrency, Long> {
 
+    Mono<LastCurrency> findByCurrency(String currency);
+
     @Modifying
     @Query("""
     INSERT INTO last_currency (currency, rate, source) 

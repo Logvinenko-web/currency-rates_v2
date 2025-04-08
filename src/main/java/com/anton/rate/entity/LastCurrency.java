@@ -2,8 +2,10 @@ package com.anton.rate.entity;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mapstruct.ap.internal.conversion.ConversionUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,6 +15,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table("last_currency ")
 public class LastCurrency {
 
@@ -32,5 +35,6 @@ public class LastCurrency {
     @Column("updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
 
 }
