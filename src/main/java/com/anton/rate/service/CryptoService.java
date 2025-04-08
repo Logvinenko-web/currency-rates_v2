@@ -33,15 +33,14 @@ public class CryptoService {
             .bodyToFlux(CryptoResponse.class)
             .doOnNext(crypto -> log.info("Received crypto data: {}", crypto))
             .map(CryptoMapper.INSTANCE::toCryptoEntity)
-            .onErrorResume(e -> {
-                log.info("Error while fetching crypto data: {}", e.getMessage());
-                return repository.findLastCurrency("crypto");
-            })
             .flatMap(crypto ->
                 repository.save(crypto)
                     .then(lastCurrencyRepository.saveOrUpdateLatestRate(crypto.getCurrency(), crypto.getRate(), "crypto"))
-                    .thenReturn(crypto)
-            );
+                    .thenReturn(crypto))
+                    .onErrorResume(e -> {
+                log.info("Error while fetching crypto data: {}", e.getMessage());
+                return repository.findLastCurrency("crypto");
+            });
 
     }
 

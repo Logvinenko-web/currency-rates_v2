@@ -3,6 +3,7 @@ package com.anton.rate;
 import com.anton.rate.model.CurrencyResponse;
 import com.anton.rate.repository.CryptoCurrencyRepository;
 import com.anton.rate.repository.FiatCurrencyRepository;
+import com.anton.rate.repository.LastCurrencyRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -43,6 +44,9 @@ public class BaseFunctionalTest extends BaseTest {
     @Autowired
     FiatCurrencyRepository fiatCurrencyRepository;
 
+    @Autowired
+    LastCurrencyRepository lastCurrencyRepository;
+
     @BeforeAll
     static void setup () {
         MOCK_SERVER.start();
@@ -53,6 +57,7 @@ public class BaseFunctionalTest extends BaseTest {
         MOCK_SERVER.resetAll();
         cryptoCurrencyRepository.deleteAll().block();
         fiatCurrencyRepository.deleteAll().block();
+        lastCurrencyRepository.deleteAll().block();
     }
 
     @AfterAll

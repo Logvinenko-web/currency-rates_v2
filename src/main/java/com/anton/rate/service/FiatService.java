@@ -34,14 +34,14 @@ public class FiatService {
             .bodyToFlux(FiatResponse.class)
             .doOnNext(fiat -> log.info("Received fiat data: {}", fiat))
             .map(FiatMapper.INSTANCE::toFiatEntity)
-            .onErrorResume(e -> {
-                log.info("Error while fetching fiat data: {}", e.getMessage());
-                return repository.findLastCurrency("fiat");
-            })
             .flatMap(fiat ->
                 repository.save(fiat)
                     .then(lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "fiat"))
-                    .thenReturn(fiat));
+                    .thenReturn(fiat))
+            .onErrorResume(e -> {
+                log.info("Error while fetching fiat data: {}", e.getMessage());
+                return repository.findLastCurrency("fiat");
+            });
     }
 
     public Mono<List<FiatDto>> getFiatRates () {
