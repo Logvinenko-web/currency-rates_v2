@@ -48,7 +48,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("Check last 3 data with fiat db")
+    @DisplayName("Check last  data with fiat db")
     void checkFiatDataWithDb () throws JSONException {
 
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
@@ -67,7 +67,7 @@ class RatesFunctionalTests extends BaseFunctionalTest {
     }
 
     @Test
-    @DisplayName("Check last 3 data with crypto db")
+    @DisplayName("Check last  data with crypto db")
     void checkCryptoDataWithDb () throws JSONException {
 
         mockGetSuccessResponse(FIAT_PATH, readAsString("fiat"));
