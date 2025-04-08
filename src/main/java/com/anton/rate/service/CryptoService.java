@@ -31,11 +31,11 @@ public class CryptoService {
             .bodyToFlux(CryptoResponse.class)
             .doOnNext(crypto -> log.info("Received crypto data: {}", crypto))
             .map(CryptoMapper.INSTANCE::toCryptoEntity)
+            .flatMap(repository::save)
             .onErrorResume(e -> {
                 log.info("Error while fetching crypto data: {}", e.getMessage());
                 return repository.findLastCurrency();
-            })
-            .flatMap(repository::save);
+            });
 
     }
 

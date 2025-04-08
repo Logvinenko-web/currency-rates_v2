@@ -32,11 +32,12 @@ public class FiatService {
             .bodyToFlux(FiatResponse.class)
             .doOnNext(fiat -> log.info("Received fiat data: {}", fiat))
             .map(FiatMapper.INSTANCE::toFiatEntity)
+            .flatMap(repository::save)
             .onErrorResume(e -> {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
                 return repository.findLastCurrency();
-            })
-            .flatMap(repository::save);
+            });
+
     }
 
     public Mono<List<FiatDto>> getFiatRates () {
