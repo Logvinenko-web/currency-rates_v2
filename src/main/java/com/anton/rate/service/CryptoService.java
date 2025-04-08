@@ -41,7 +41,6 @@ public class CryptoService {
             .onErrorResume(e -> {
                 log.info("Error while fetching crypto data: {}", e.getMessage());
                 return lastCurrencyRepository.findLastCurrency("crypto")
-                    .next()
                     .map(LastCurrencyMapper.INSTANCE::toCryptoEntity);
             });
 

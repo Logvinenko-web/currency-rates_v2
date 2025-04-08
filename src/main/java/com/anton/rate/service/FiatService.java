@@ -42,7 +42,6 @@ public class FiatService {
             .onErrorResume(e -> {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
                 return lastCurrencyRepository.findLastCurrency("fiat")
-                    .next()
                     .map(LastCurrencyMapper.INSTANCE::toFiatEntity);
             });
     }
