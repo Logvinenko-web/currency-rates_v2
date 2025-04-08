@@ -37,8 +37,10 @@ public class CryptoService {
                 log.info("Error while fetching crypto data: {}", e.getMessage());
                 return repository.findLastCurrency("crypto");
             })
-            .flatMap(fiat -> lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "crypto")
-                .then(repository.save(fiat))
+            .flatMap(crypto ->
+                repository.save(crypto)
+                    .then(lastCurrencyRepository.saveOrUpdateLatestRate(crypto.getCurrency(), crypto.getRate(), "crypto"))
+                    .thenReturn(crypto)
             );
 
     }

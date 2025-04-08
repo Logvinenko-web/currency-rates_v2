@@ -38,9 +38,10 @@ public class FiatService {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
                 return repository.findLastCurrency("fiat");
             })
-            .flatMap(fiat -> lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "fiat")
-                .then(repository.save(fiat))
-            );
+            .flatMap(fiat ->
+                repository.save(fiat)
+                    .then(lastCurrencyRepository.saveOrUpdateLatestRate(fiat.getCurrency(), fiat.getRate(), "fiat"))
+                    .thenReturn(fiat));
     }
 
     public Mono<List<FiatDto>> getFiatRates () {
