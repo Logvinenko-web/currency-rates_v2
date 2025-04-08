@@ -3,6 +3,7 @@ package com.anton.rate.service;
 import com.anton.rate.config.RateConfig;
 import com.anton.rate.entity.Crypto;
 import com.anton.rate.mapper.CryptoMapper;
+import com.anton.rate.mapper.LastCurrencyMapper;
 import com.anton.rate.model.CryptoDto;
 import com.anton.rate.model.CryptoResponse;
 import com.anton.rate.repository.CryptoCurrencyRepository;
@@ -37,9 +38,11 @@ public class CryptoService {
                 repository.save(crypto)
                     .then(lastCurrencyRepository.saveOrUpdateLatestRate(crypto.getCurrency(), crypto.getRate(), "crypto"))
                     .thenReturn(crypto))
-                    .onErrorResume(e -> {
+            .onErrorResume(e -> {
                 log.info("Error while fetching crypto data: {}", e.getMessage());
-                return repository.findLastCurrency("crypto");
+                return lastCurrencyRepository.findLastCurrency("crypto")
+                    .next()
+                    .map(LastCurrencyMapper.INSTANCE::toCryptoEntity);
             });
 
     }

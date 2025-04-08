@@ -3,6 +3,7 @@ package com.anton.rate.service;
 import com.anton.rate.config.RateConfig;
 import com.anton.rate.entity.Fiat;
 import com.anton.rate.mapper.FiatMapper;
+import com.anton.rate.mapper.LastCurrencyMapper;
 import com.anton.rate.model.FiatDto;
 import com.anton.rate.model.FiatResponse;
 import com.anton.rate.repository.FiatCurrencyRepository;
@@ -40,7 +41,9 @@ public class FiatService {
                     .thenReturn(fiat))
             .onErrorResume(e -> {
                 log.info("Error while fetching fiat data: {}", e.getMessage());
-                return repository.findLastCurrency("fiat");
+                return lastCurrencyRepository.findLastCurrency("fiat")
+                    .next()
+                    .map(LastCurrencyMapper.INSTANCE::toFiatEntity);
             });
     }
 
